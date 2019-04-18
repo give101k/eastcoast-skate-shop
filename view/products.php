@@ -7,6 +7,7 @@ $year = get_car_year();
   <head>
     <title>Auto Parts Direct</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/products.css">
     <script type="text/javascript" src="javascript/products.js"></script>
   </head>
 <body>
@@ -32,7 +33,7 @@ $year = get_car_year();
     </div>
   </nav> 
   <main class="container">
-    <div class="card">
+    <div class="card" id="crd">
       <form action="">
         <label for="">Year:</label>
         <select name="year" id="" class="form-control" onchange="showMake(this.value)">
