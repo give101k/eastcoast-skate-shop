@@ -4,9 +4,7 @@ require_once("model/database.php");
 require_once("model/login_func.php");
 
 $login_message="";
-/*if($action == NULL){
-  $action = 'login';
-}*/
+
 
 $action = filter_input(INPUT_POST, 'action');
 if ($action == NULL) {

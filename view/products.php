@@ -7,6 +7,7 @@ $year = get_car_year();
   <head>
     <title>Auto Parts Direct</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script type="text/javascript" src="javascript/products.js"></script>
   </head>
 <body>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -34,11 +35,15 @@ $year = get_car_year();
     <div class="card">
       <form action="">
         <label for="">Year:</label>
-        <select name="" id="" class="form-control">
+        <select name="year" id="" class="form-control" onchange="showMake(this.value)">
+          <option value="">Year:</option>
           <?php foreach($year as $yr):?>
-          <option><?php echo $yr['year'];?></option>
+          <option value="<?php echo $yr['year'];?>"><?php echo $yr['year'];?></option>
           <?php endforeach; ?>
         </select>
+        <div id="make"></div>
+        <div id="model"></div>
+        <div id="engine"></div>
       </form>
     </div>
   </main>
