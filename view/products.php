@@ -34,7 +34,8 @@ $year = get_car_year();
   </nav> 
   <main class="container">
     <div class="card" id="crd">
-      <form action="">
+      <form action="." method="post" id="car">
+        <input type="hidden" name="action" value="car">
         <label for="">Year:</label>
         <select name="year" id="" class="form-control" onchange="showMake(this.value)">
           <option value="">Year:</option>

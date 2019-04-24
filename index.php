@@ -50,5 +50,13 @@ switch($action){
   case 'products':
     include('view/products.php');
     break;
+  case 'car':
+    $carYear = filter_input(INPUT_POST, 'year');
+    $carMake = filter_input(INPUT_POST, 'make');
+    $carModel = filter_input(INPUT_POST, 'model');
+    $carEngine = filter_input(INPUT_POST, 'engine');
+    $car = array('year' => $carYear, 'make' => $carMake, 'model' => $carModel, 'engine' => $carEngine);
+    include('view/car.php');
+    break;
 }
 ?>
