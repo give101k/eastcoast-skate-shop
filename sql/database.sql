@@ -39,6 +39,7 @@ CREATE TABLE `CAR`(
 
 CREATE TABLE `PART`(
   `part_number` varchar(20) NOT NULL,
+  `brand` varchar(100) NOT NULL,
   `name` varchar(20) NOT NULL,
   `price` decimal(6,2) NOT NULL,
   `num_stock` int(11) NOT NULL,
