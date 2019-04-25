@@ -1,5 +1,4 @@
 <?php
-include('model/data_func.php');
 $year = get_car_year();
 ?>
 <!DOCTYPE html>
