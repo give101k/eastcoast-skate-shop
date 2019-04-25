@@ -2,6 +2,7 @@
 session_start();
 require_once("model/database.php");
 require_once("model/login_func.php");
+require_once('model/data_func.php');
 
 $login_message="";
 
@@ -56,7 +57,15 @@ switch($action){
     $carModel = filter_input(INPUT_POST, 'model');
     $carEngine = filter_input(INPUT_POST, 'engine');
     $car = array('year' => $carYear, 'make' => $carMake, 'model' => $carModel, 'engine' => $carEngine);
+    $carid = get_car_id($car);
+    $part_cat = get_part_cat($carid[0]['car_id']);
     include('view/car.php');
+    break;
+  case 'display':
+    $cat = filter_input(INPUT_GET, 'cat');
+    $id = filter_input(INPUT_GET, 'carid');
+    $products = get_products($cat, $id);
+    include('view/displayproducts.php');
     break;
 }
 ?>
