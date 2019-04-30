@@ -25,6 +25,7 @@ switch($action){
     $password = filter_input(INPUT_POST, 'password'); 
     if(valid_login($user, $password)){
       $_SESSION['is_valid'] = true;
+      $_SESSION['cart']=array();
       if(usr_type($user) == "admin"){
         include('admin.php');
       } elseif(usr_type($user) == "client"){
@@ -43,12 +44,13 @@ switch($action){
     include('view/client.php');
     break;
   case 'logout':
-    $_SESSION = array();
+    session_unset(); 
     session_destroy(); 
     $login_message = 'You have been logged out.';
     include('view/login.php');
     break;
   case 'products':
+    $year = get_car_year();
     include('view/products.php');
     break;
   case 'car':
@@ -67,5 +69,29 @@ switch($action){
     $products = get_products($cat, $id);
     include('view/displayproducts.php');
     break;
+  case 'buy':
+    $product = filter_input(INPUT_POST, 'product');
+    if(in_cart($product) == false){
+      array_push($_SESSION['cart'],$product);
+      $_SESSION['quantiy'][$product] = 1;
+    }
+    for ($i=0; $i < sizeof($_SESSION['cart']) ; $i++) { 
+      $prod[$i] = get_prod_into($_SESSION['cart'][$i]);
+    }
+    include('view/cart.php');
+    break;
+  case 'cartupdate':
+    $qt = filter_input(INPUT_POST, 'updateqt');
+    $ptnum = filter_input(INPUT_POST, 'pnum');
+    if($qt == 0 && in_array($ptnum, $_SESSION['cart']) == true){
+      $key = array_search($ptnum,$_SESSION['cart']);
+      array_splice($_SESSION['cart'], $key, $key + 1);
+      unset($_SESSION['quantiy'][$ptnum]);
+    }
+    $_SESSION['quantiy'][$ptnum] = $qt;
+    for ($i=0; $i < sizeof($_SESSION['cart']) ; $i++) { 
+      $prod[$i] = get_prod_into($_SESSION['cart'][$i]);
+    }
+    include('view/cart.php');
 }
 ?>

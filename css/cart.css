@@ -1,0 +1,16 @@
+.prod-row {
+  border-bottom: 1px solid #e1e1e1;
+  padding: 10px;
+}
+.page-header {
+  border-bottom: 1px solid #e1e1e1;
+}
+.cart-img {
+  max-width: 150px;
+}
+h3 {
+  font-size: 20px;
+}
+#updatebt {
+  margin-top: 4px;
+}

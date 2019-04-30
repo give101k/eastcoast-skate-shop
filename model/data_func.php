@@ -99,4 +99,26 @@ function get_products($cat, $id){
   $statement->closeCursor();
   return $row;
 }
+
+function get_prod_into($pnum){
+  global $db;
+  $query = 'SELECT PART.brand, PART.name, PART.price, PART.part_number, PART.img_url
+            FROM PART
+            WHERE PART.part_number = :pnum';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':pnum', $pnum);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row[0];
+}
+
+function in_cart($pnum){
+  for ($i=0; $i < sizeof($_SESSION['cart']) ; $i++) { 
+    if($_SESSION['cart'][$i] == $pnum){
+      return true;
+    }
+  }
+  return false;
+}
 ?>
