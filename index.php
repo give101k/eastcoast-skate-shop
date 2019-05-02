@@ -25,10 +25,13 @@ switch($action){
     $password = filter_input(INPUT_POST, 'password'); 
     if(valid_login($user, $password)){
       $_SESSION['is_valid'] = true;
-      $_SESSION['cart']=array();
+      $_SESSION['username'] = $user;
       if(usr_type($user) == "admin"){
         include('admin.php');
       } elseif(usr_type($user) == "client"){
+        $_SESSION['cart']=array();
+        load_cart();
+        $_SESSION['cartqt'] = array_sum ($_SESSION['quantiy']);
         include('view/client.php');
       }else{
         echo "invlaid type";
@@ -40,19 +43,23 @@ switch($action){
       include('view/login.php');
     }
     break;
+
   case 'home':
     include('view/client.php');
     break;
+
   case 'logout':
     session_unset(); 
     session_destroy(); 
     $login_message = 'You have been logged out.';
     include('view/login.php');
     break;
+
   case 'products':
     $year = get_car_year();
     include('view/products.php');
     break;
+
   case 'car':
     $carYear = filter_input(INPUT_POST, 'year');
     $carMake = filter_input(INPUT_POST, 'make');
@@ -63,23 +70,28 @@ switch($action){
     $part_cat = get_part_cat($carid[0]['car_id']);
     include('view/car.php');
     break;
+
   case 'display':
     $cat = filter_input(INPUT_GET, 'cat');
     $id = filter_input(INPUT_GET, 'carid');
     $products = get_products($cat, $id);
     include('view/displayproducts.php');
     break;
+
   case 'buy':
     $product = filter_input(INPUT_POST, 'product');
     if(in_cart($product) == false){
       array_push($_SESSION['cart'],$product);
       $_SESSION['quantiy'][$product] = 1;
+      $_SESSION['cartqt'] = array_sum ($_SESSION['quantiy']);
+      update_cart($product);
     }
     for ($i=0; $i < sizeof($_SESSION['cart']) ; $i++) { 
       $prod[$i] = get_prod_into($_SESSION['cart'][$i]);
     }
     include('view/cart.php');
     break;
+
   case 'cartupdate':
     $qt = filter_input(INPUT_POST, 'updateqt');
     $ptnum = filter_input(INPUT_POST, 'pnum');
@@ -87,8 +99,31 @@ switch($action){
       $key = array_search($ptnum,$_SESSION['cart']);
       array_splice($_SESSION['cart'], $key, $key + 1);
       unset($_SESSION['quantiy'][$ptnum]);
+      $_SESSION['cartqt']--;
+      remove_item_from_cart($ptnum);
     }
     $_SESSION['quantiy'][$ptnum] = $qt;
+    for ($i=0; $i < sizeof($_SESSION['cart']) ; $i++) { 
+      $prod[$i] = get_prod_into($_SESSION['cart'][$i]);
+    }
+    $_SESSION['cartqt'] = array_sum ($_SESSION['quantiy']);
+    include('view/cart.php');
+    break;
+
+  case 'checkout':
+    do {
+      $odnum = uniqid();
+    } while (ordernum_exist($odnum) == true);
+    $subtotal = 0;
+    foreach ($prod as $p) {
+      $subtotal += $p['price'] * $_SESSION['quantiy'][$p['part_number']];
+    }
+    $tax = $subtotal * 0.06;
+    $total = $subtotal + $tax;
+    //intsert_order();
+    break;
+
+  case 'cart':
     for ($i=0; $i < sizeof($_SESSION['cart']) ; $i++) { 
       $prod[$i] = get_prod_into($_SESSION['cart'][$i]);
     }

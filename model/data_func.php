@@ -121,4 +121,57 @@ function in_cart($pnum){
   }
   return false;
 }
+function ordernum_exist($onum){
+  global $db;
+  $query = 'SELECT ORDERS.order_number
+            FROM ORDERS
+            WHERE ORDERS.order_number = :onum';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':onum', $onum);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  if (!$row) {
+    return false;
+  } else{
+    return true;
+  }
+}
+
+function load_cart(){
+  global $db;
+  $query = 'SELECT CART.cname, CART.part, CART.qyt
+            FROM CART
+            WHERE CART.cname = :cname';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':cname', $_SESSION['username']);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  if(!$row){
+    return 0;
+  }else{
+    foreach ($row as $prod) {
+      array_push($_SESSION['cart'], $prod['part']);
+      $_SESSION['quantiy'][$prod['part']] = $prod['qyt'];
+    }
+  }
+}
+
+function update_cart($part){
+  global $db;
+  $qyt = 1;
+  $query = 'INSERT INTO CART(cname, part, qyt) VALUES (:cname, :part, :qyt)';
+  $statement = $db->prepare($query);
+  $statement->execute(array('cname' => $_SESSION['username'], 'part' => $part, 'qyt' => $qyt));
+  $statement->closeCursor();
+}
+
+function remove_item_from_cart($pnum){
+  global $db;
+  $query = 'DELETE FROM CART WHERE CART.cname = :cname AND CART.part = :pnum';
+  $statement = $db->prepare($query);
+  $statement->execute(array('cname' => $_SESSION['username'], 'pnum' => $pnum));
+  $statement->closeCursor();
+}
 ?>
