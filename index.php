@@ -31,7 +31,12 @@ switch($action){
       } elseif(usr_type($user) == "client"){
         $_SESSION['cart']=array();
         load_cart();
-        $_SESSION['cartqt'] = array_sum ($_SESSION['quantiy']);
+        if(isset($_SESSION['cartqt'])){
+          $_SESSION['cartqt'] = array_sum ($_SESSION['quantiy']);
+        } else{
+          $_SESSION['cartqt'] = 0;
+        }
+        
         include('view/client.php');
       }else{
         echo "invlaid type";
