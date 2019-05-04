@@ -83,6 +83,7 @@
               value="<?php echo $_SESSION['quantiy'][$pd['part_number']] ?>"
             />
             <input
+              id="updatebt"
               type="submit"
               class="btn btn-primary"
               value="update"
