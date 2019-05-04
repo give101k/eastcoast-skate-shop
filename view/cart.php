@@ -36,7 +36,11 @@
             <a class="nav-link" href="index.php?action=products">Products</a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="index.php?action=cart">Cart <i class="fas fa-shopping-cart"></i> <span class="label label-primary"><?php echo $_SESSION['cartqt'];?></span></a>
+            <a class="nav-link" href="index.php?action=cart">Cart <i class="fas fa-shopping-cart"></i> 
+              <span class="label label-primary">
+                <?php echo $_SESSION['cartqt']; ?>
+              </span>
+          </a>
           </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" action="index.php">
@@ -55,18 +59,17 @@
           </div>
         </div>
       </div>
-      <?php
-        if(isset($prod) == true):
-       foreach($prod as $pd): ?>
+      <?php if (isset($prod) == true):
+        foreach ($prod as $pd): ?>
       <div class="row prod-row">
         <div class="col">
-          <img class="cart-img" src="<?php echo $pd['img_url'];?>" alt="" />
+          <img class="cart-img" src="<?php echo $pd['img_url']; ?>" alt="" />
         </div>
-        <div class="col">
-          <h3><?php echo $pd['brand'].' '.$pd['name'];?></h3>
+        <div class="col text-center">
+          <h3><?php echo $pd['brand'] . ' ' . $pd['name']; ?></h3>
         </div>
-        <div class="col">
-          <h3><?php echo '$'.number_format($pd['price'],2);?></h3>
+        <div class="col text-center">
+          <h3><?php echo '$' . number_format($pd['price'], 2); ?></h3>
         </div>
         <div class="col">
           <form action="." method="post">
@@ -74,32 +77,34 @@
             <input
               type="hidden"
               name="pnum"
-              value="<?php echo $pd['part_number'];?>"
+              value="<?php echo $pd['part_number']; ?>"
             />
             <input
               type="number"
               name="updateqt"
-              class="form-control"
-              value="<?php echo $_SESSION['quantiy'][$pd['part_number']] ?>"
+              class="form-control ml-auto "
+              value="<?php echo $_SESSION['quantiy'][$pd['part_number']]; ?>"
             />
             <input
               id="updatebt"
               type="submit"
-              class="btn btn-primary"
+              class="btn btn-primary ml-auto "
               value="update"
             />
           </form>
         </div>
-        <div class="col">
+        <div class="col text-center">
           <h3>
-            <?php echo '$'.number_format(($pd['price'] * $_SESSION['quantiy'][$pd['part_number']]), 2); ?>
+            <?php echo '$' .
+              number_format(
+                $pd['price'] * $_SESSION['quantiy'][$pd['part_number']],
+                2
+              ); ?>
           </h3>
         </div>
       </div>
-      <?php 
-      endforeach;
-      elseif(isset($prod) == false):
-      ?>
+      <?php endforeach;
+      elseif (isset($prod) == false): ?>
       <div>
         Cart is empty
       </div>
@@ -109,14 +114,15 @@
         <div class="col-sm-3">
           <h3 align="right">
             Sub Total:
-            <?php 
+            <?php
             $subtotal = 0;
-            if(isset($prod)){
+            if (isset($prod)) {
               foreach ($prod as $p) {
-                $subtotal += $p['price'] * $_SESSION['quantiy'][$p['part_number']];
+                $subtotal +=
+                  $p['price'] * $_SESSION['quantiy'][$p['part_number']];
               }
             }
-            echo '$'.number_format($subtotal, 2);
+            echo '$' . number_format($subtotal, 2);
             ?>
           </h3>
         </div>
@@ -128,7 +134,7 @@
             Tax:
             <?php
             $tax = $subtotal * 0.06;
-            echo '$'.number_format($tax, 2);
+            echo '$' . number_format($tax, 2);
             ?>
           </h3>
         </div>
@@ -140,7 +146,7 @@
             Total:
             <?php
             $total = $subtotal + $tax;
-            echo '$'.number_format($total, 2);
+            echo '$' . number_format($total, 2);
             ?>
           </h3>
         </div>
@@ -150,7 +156,12 @@
         <div class="col-sm-3">
           <form action="." method="post">
             <input type="hidden" name="action" value="checkout">
-            <input type="submit" class="btn btn-primary" value="Checkout" id="checkout">
+            <input 
+              type="submit" 
+              class="btn btn-primary" 
+              value="Checkout" 
+              id="checkout"
+            >
           </form>
         </div>
       </div>

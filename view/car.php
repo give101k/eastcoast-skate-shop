@@ -27,7 +27,11 @@
           <a class="nav-link" href="index.php?action=products">Products</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="index.php?action=cart">Cart <i class="fas fa-shopping-cart"></i> <span class="label label-primary"><?php echo $_SESSION['cartqt'];?></span></a>
+          <a class="nav-link" href="index.php?action=cart">Cart <i class="fas fa-shopping-cart"></i>
+          <span class="label label-primary">
+            <?php echo $_SESSION['cartqt']; ?>
+          </span>
+        </a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0" action="index.php">
@@ -39,8 +43,15 @@
   <main class="container">
     <div class="card" id="crd">
       <div class="list-group">
-        <?php foreach($part_cat as $cat): ?>
-          <a href="?action=display&cat=<?php echo $cat['category'] ;?>&carid=<?php echo $carid[0]['car_id'];?>" class="list-group-item list-group-item-action"><?php echo $cat['category'] ;?></a>
+        <?php foreach ($part_cat as $cat): ?>
+          <a 
+            href="?action=display&cat=<?php echo $cat[
+              'category'
+            ]; ?>&carid=<?php echo $carid[0]['car_id']; ?>" 
+            class="list-group-item list-group-item-action"><?php echo $cat[
+              'category'
+            ]; ?>
+          </a>
         <?php endforeach; ?>
       </div>
     </div>
