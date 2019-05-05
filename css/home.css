@@ -1,0 +1,8 @@
+.carousel-inner > .carousel-item > img {
+  margin: 0 auto;
+  max-width: 400px;
+}
+.shop {
+  max-width: 200px;
+  margin: 15px auto;
+}

@@ -16,41 +16,57 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-      <a class="navbar-brand" href="index.php?action=home">Auto Part Direct</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#collapsibleNavbar"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
+  <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <a class="navbar-brand" href="index.php?action=home">EastCost Skate Shop</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#collapsibleNavbar"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-      <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="index.php?action=home">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="index.php?action=products">Products</a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="index.php?action=cart">Cart <i class="fas fa-shopping-cart"></i> 
-              <span class="label label-primary">
-                <?php echo $_SESSION['cartqt']; ?>
-              </span>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="?action=home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="?action=products&cat=all">Products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="">My Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="">Register</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="index.php?action=cart"> Cart <i class="fas fa-shopping-cart"></i>
+            <span class="label label-primary"></span>
+              <?php echo $_SESSION['cartqt']; ?>
+            </span>
           </a>
-          </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0" action="index.php">
-          <input type="hidden" name="action" value="logout" />
-          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
-            Logout
-          </button>
-        </form>
-      </div>
-    </nav>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="">Contact Us</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0" action="index.php">
+        <?php if ($_SESSION['is_valid'] == true): ?>
+        <input type="hidden" name="action" value="logout" />
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
+          Logout
+        </button>
+        <?php else: ?>
+        <input type="hidden" name="action" value="login" />
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
+          Login
+        </button>
+        <?php endif; ?>
+      </form>
+    </div>
+  </nav>
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-12">
@@ -77,27 +93,45 @@
             <input
               type="hidden"
               name="pnum"
-              value="<?php echo $pd['part_number']; ?>"
+              value="<?php echo $pd['product_number']; ?>"
             />
             <input
               type="number"
               name="updateqt"
               class="form-control ml-auto "
-              value="<?php echo $_SESSION['quantiy'][$pd['part_number']]; ?>"
+              value="<?php echo $_SESSION['quantiy'][$pd['product_number']]; ?>"
             />
             <input
-              id="updatebt"
               type="submit"
-              class="btn btn-primary ml-auto "
-              value="update"
+              class="btn btn-primary ml-auto updatebt "
+              value="Update"
             />
           </form>
+          <form action="." method="post">
+            <input type="hidden" name="action" value="cartupdate" />
+            <input
+              type="hidden"
+              name="pnum"
+              value="<?php echo $pd['product_number']; ?>"
+            />
+            <input
+              type="hidden"
+              name="updateqt"
+              value="0"
+            />
+            <input
+              type="submit"
+              class="btn btn-primary ml-auto updatebt "
+              value="Remove"
+            />
+          </form>
+          
         </div>
         <div class="col text-center">
           <h3>
             <?php echo '$' .
               number_format(
-                $pd['price'] * $_SESSION['quantiy'][$pd['part_number']],
+                $pd['price'] * $_SESSION['quantiy'][$pd['product_number']],
                 2
               ); ?>
           </h3>
@@ -119,7 +153,7 @@
             if (isset($prod)) {
               foreach ($prod as $p) {
                 $subtotal +=
-                  $p['price'] * $_SESSION['quantiy'][$p['part_number']];
+                  $p['price'] * $_SESSION['quantiy'][$p['product_number']];
               }
             }
             echo '$' . number_format($subtotal, 2);

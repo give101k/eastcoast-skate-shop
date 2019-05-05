@@ -1,6 +1,6 @@
 <?php
 require_once 'database.php';
-function get_car_year()
+/*function get_car_year()
 {
   global $db;
   $query = 'SELECT DISTINCT year
@@ -105,14 +105,14 @@ function get_products($cat, $id)
   $row = $statement->fetchAll();
   $statement->closeCursor();
   return $row;
-}
+}*/
 
 function get_prod_into($pnum)
 {
   global $db;
-  $query = 'SELECT PART.brand, PART.name, PART.price, PART.part_number, PART.img_url
-            FROM PART
-            WHERE PART.part_number = :pnum';
+  $query = 'SELECT PRODUCTS.brand, PRODUCTS.name, PRODUCTS.price, PRODUCTS.product_number, PRODUCTS.img_url
+            FROM PRODUCTS
+            WHERE PRODUCTS.product_number = :pnum';
   $statement = $db->prepare($query);
   $statement->bindValue(':pnum', $pnum);
   $statement->execute();
@@ -189,6 +189,96 @@ function remove_item_from_cart($pnum)
   $query = 'DELETE FROM CART WHERE CART.cname = :cname AND CART.part = :pnum';
   $statement = $db->prepare($query);
   $statement->execute(array('cname' => $_SESSION['username'], 'pnum' => $pnum));
+  $statement->closeCursor();
+}
+
+function get_all_prod()
+{
+  global $db;
+  $query = 'SELECT *
+            FROM PRODUCTS';
+  $statement = $db->prepare($query);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row;
+}
+function get_decks()
+{
+  global $db;
+  $query = 'SELECT *
+            FROM PRODUCTS
+            WHERE PRODUCTS.categories = "deck"';
+  $statement = $db->prepare($query);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row;
+}
+function get_trucks()
+{
+  global $db;
+  $query = 'SELECT *
+            FROM PRODUCTS
+            WHERE PRODUCTS.categories = "trucks"';
+  $statement = $db->prepare($query);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row;
+}
+function get_bearings()
+{
+  global $db;
+  $query = 'SELECT *
+            FROM PRODUCTS
+            WHERE PRODUCTS.categories = "bearings"';
+  $statement = $db->prepare($query);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row;
+}
+function get_wheels()
+{
+  global $db;
+  $query = 'SELECT *
+            FROM PRODUCTS
+            WHERE PRODUCTS.categories = "wheels"';
+  $statement = $db->prepare($query);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row;
+}
+function get_accs()
+{
+  global $db;
+  $query = 'SELECT *
+            FROM PRODUCTS
+            WHERE PRODUCTS.categories = "accs"';
+  $statement = $db->prepare($query);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row;
+}
+function insert_order($od_number, $sub, $tx, $tot)
+{
+  global $db;
+  $timestamp = date('Y-m-d G:i:s');
+  $query = 'INSERT INTO ORDERS(order_number, total_price, status, date, cusername, tax, subtotal) 
+            VALUES (:odnum, :tot, :status, :date, :cname, :tx, :sub)';
+  $statement = $db->prepare($query);
+  $statement->execute(array(
+    'odnum' => $od_number,
+    'tot' => $tot,
+    'status' => "ordered",
+    'date' => $timestamp,
+    'cname' => $_SESSION['username'],
+    'tx' => $tx,
+    'sub' => $sub
+  ));
   $statement->closeCursor();
 }
 ?>

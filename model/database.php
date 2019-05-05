@@ -1,5 +1,5 @@
 <?php
-$dsn = 'mysql:host=localhost;dbname=AutoDirect';
+$dsn = 'mysql:host=localhost;dbname=EastCoastSkate';
 $username = 'admin';
 $password = 'pass';
 

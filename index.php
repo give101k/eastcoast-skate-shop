@@ -5,6 +5,15 @@ require_once "model/login_func.php";
 require_once 'model/data_func.php';
 
 $login_message = "";
+if (!isset($_SESSION['is_valid'])) {
+  $_SESSION['is_valid'] = false;
+}
+if (!isset($_SESSION['cart'])) {
+  $_SESSION['cart'] = array();
+}
+if (!isset($_SESSION['cartqt'])) {
+  $_SESSION['cartqt'] = 0;
+}
 
 $action = filter_input(INPUT_POST, 'action');
 if ($action == null) {
@@ -12,10 +21,6 @@ if ($action == null) {
   if ($action == null) {
     $action = 'home';
   }
-}
-
-if (!isset($_SESSION['is_valid'])) {
-  $action = 'login';
 }
 
 switch ($action) {
@@ -28,15 +33,14 @@ switch ($action) {
       if (usr_type($user) == "admin") {
         include 'admin.php';
       } elseif (usr_type($user) == "client") {
-        $_SESSION['cart'] = array();
         load_cart();
-        if (isset($_SESSION['cartqt'])) {
+        if (!empty($_SESSION['cart'])) {
           $_SESSION['cartqt'] = array_sum($_SESSION['quantiy']);
         } else {
           $_SESSION['cartqt'] = 0;
         }
 
-        include 'view/client.php';
+        include 'view/home.php';
       } else {
         echo "invlaid type";
       }
@@ -50,7 +54,7 @@ switch ($action) {
     break;
 
   case 'home':
-    include 'view/client.php';
+    include 'view/home.php';
     break;
 
   case 'logout':
@@ -61,31 +65,28 @@ switch ($action) {
     break;
 
   case 'products':
-    $year = get_car_year();
-    include 'view/products.php';
-    break;
-
-  case 'car':
-    $carYear = filter_input(INPUT_POST, 'year');
-    $carMake = filter_input(INPUT_POST, 'make');
-    $carModel = filter_input(INPUT_POST, 'model');
-    $carEngine = filter_input(INPUT_POST, 'engine');
-    $car = array(
-      'year' => $carYear,
-      'make' => $carMake,
-      'model' => $carModel,
-      'engine' => $carEngine
-    );
-    $carid = get_car_id($car);
-    $part_cat = get_part_cat($carid[0]['car_id']);
-    include 'view/car.php';
-    break;
-
-  case 'display':
     $cat = filter_input(INPUT_GET, 'cat');
-    $id = filter_input(INPUT_GET, 'carid');
-    $products = get_products($cat, $id);
-    include 'view/displayproducts.php';
+    switch ($cat) {
+      case 'all':
+        $products = get_all_prod();
+        break;
+      case 'decks':
+        $products = get_decks();
+        break;
+      case 'trucks':
+        $products = get_trucks();
+        break;
+      case 'bearings':
+        $products = get_bearings();
+        break;
+      case 'wheels':
+        $products = get_wheels();
+        break;
+      case 'acc':
+        $products = get_accs();
+        break;
+    }
+    include 'view/products.php';
     break;
 
   case 'buy':
@@ -94,7 +95,9 @@ switch ($action) {
       array_push($_SESSION['cart'], $product);
       $_SESSION['quantiy'][$product] = 1;
       $_SESSION['cartqt'] = array_sum($_SESSION['quantiy']);
-      update_cart($product);
+      if ($_SESSION['is_valid'] == true) {
+        update_cart($product);
+      }
     }
     for ($i = 0; $i < sizeof($_SESSION['cart']); $i++) {
       $prod[$i] = get_prod_into($_SESSION['cart'][$i]);
@@ -109,8 +112,9 @@ switch ($action) {
       $key = array_search($ptnum, $_SESSION['cart']);
       array_splice($_SESSION['cart'], $key, $key + 1);
       unset($_SESSION['quantiy'][$ptnum]);
-      $_SESSION['cartqt']--;
-      remove_item_from_cart($ptnum);
+      if ($_SESSION['is_valid'] == true) {
+        remove_item_from_cart($ptnum);
+      }
     }
     $_SESSION['quantiy'][$ptnum] = $qt;
     for ($i = 0; $i < sizeof($_SESSION['cart']); $i++) {
@@ -121,16 +125,24 @@ switch ($action) {
     break;
 
   case 'checkout':
-    do {
-      $odnum = uniqid();
-    } while (ordernum_exist($odnum) == true);
-    $subtotal = 0;
-    foreach ($prod as $p) {
-      $subtotal += $p['price'] * $_SESSION['quantiy'][$p['part_number']];
+    if ($_SESSION['is_valid'] == false) {
+      include 'view/login.php';
+    } else {
+      do {
+        $odnum = uniqid();
+      } while (ordernum_exist($odnum) == true);
+      $subtotal = 0;
+      for ($i = 0; $i < sizeof($_SESSION['cart']); $i++) {
+        $prod[$i] = get_prod_into($_SESSION['cart'][$i]);
+      }
+      foreach ($prod as $p) {
+        $subtotal += $p['price'] * $_SESSION['quantiy'][$p['product_number']];
+      }
+      $tax = $subtotal * 0.06;
+      $total = $subtotal + $tax;
+      insert_order($odnum, $subtotal, $tax, $total);
     }
-    $tax = $subtotal * 0.06;
-    $total = $subtotal + $tax;
-    //intsert_order();
+
     break;
 
   case 'cart':
