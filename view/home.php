@@ -42,17 +42,17 @@
             <a class="nav-link" href="?action=products&cat=all">Products</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">My Account</a>
+            <a class="nav-link" href="?action=account">My Account</a>
           </li>
+          <?php if ($_SESSION['is_valid'] == false): ?>
           <li class="nav-item">
-            <a class="nav-link" href="">Register</a>
+            <a class="nav-link" href="?action=reg">Register</a>
           </li>
+          <?php endif; ?>
           <li class="nav-item">
             <a class="nav-link" href="index.php?action=cart"> Cart <i class="fas fa-shopping-cart"></i>
               <span class="label label-primary"></span>
-                <?php
-//echo $_SESSION['cartqt'];
-?>
+                <?php echo $_SESSION['cartqt']; ?>
               </span>
             </a>
           </li>

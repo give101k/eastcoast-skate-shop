@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Auto Parts Direct</title>
+    <title>EastCost Skate Shop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       rel="stylesheet"
@@ -38,9 +38,11 @@
         <li class="nav-item">
           <a class="nav-link" href="">My Account</a>
         </li>
+        <?php if ($_SESSION['is_valid'] == false): ?>
         <li class="nav-item">
-          <a class="nav-link" href="">Register</a>
+          <a class="nav-link" href="?action=reg">Register</a>
         </li>
+        <?php endif; ?>
         <li class="nav-item active">
           <a class="nav-link" href="index.php?action=cart"> Cart <i class="fas fa-shopping-cart"></i>
             <span class="label label-primary"></span>

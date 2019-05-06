@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/New_York');
 session_start();
 require_once "model/database.php";
 require_once "model/login_func.php";
@@ -13,6 +14,9 @@ if (!isset($_SESSION['cart'])) {
 }
 if (!isset($_SESSION['cartqt'])) {
   $_SESSION['cartqt'] = 0;
+}
+if (!isset($_SESSION['quantiy'])) {
+  $_SESSION['quantiy'] = array();
 }
 
 $action = filter_input(INPUT_POST, 'action');
@@ -127,7 +131,7 @@ switch ($action) {
   case 'checkout':
     if ($_SESSION['is_valid'] == false) {
       include 'view/login.php';
-    } else {
+    } elseif (valid_order() == true) {
       do {
         $odnum = uniqid();
       } while (ordernum_exist($odnum) == true);
@@ -141,8 +145,18 @@ switch ($action) {
       $tax = $subtotal * 0.06;
       $total = $subtotal + $tax;
       insert_order($odnum, $subtotal, $tax, $total);
+      insert_order_products($odnum);
+      foreach ($_SESSION['cart'] as $p) {
+        update_inv($p);
+      }
+      $_SESSION['cart'] = array();
+      $_SESSION['cartqt'] = 0;
+      $_SESSION['quantiy'] = array();
+      $name = getname();
+      include 'view/purchaced.php';
+    } elseif (valid_order() == false) {
+      include 'view/toomany.php';
     }
-
     break;
 
   case 'cart':
@@ -150,5 +164,24 @@ switch ($action) {
       $prod[$i] = get_prod_into($_SESSION['cart'][$i]);
     }
     include 'view/cart.php';
+    break;
+  case 'account':
+    if ($_SESSION['is_valid'] == false) {
+      include 'view/login.php';
+    } else {
+      $orders = get_orders();
+      include 'view/account.php';
+    }
+    break;
+  case 'details':
+    $odnum = filter_input(INPUT_POST, 'odnum');
+    $order = get_order($odnum);
+    $items = get_items($odnum);
+    include 'view/details.php';
+    break;
+
+  case 'reg':
+    include 'view/register.php';
+    break;
 }
 ?>

@@ -1,111 +1,5 @@
 <?php
 require_once 'database.php';
-/*function get_car_year()
-{
-  global $db;
-  $query = 'SELECT DISTINCT year
-            FROM CAR
-            ORDER BY year DESC';
-  $statement = $db->prepare($query);
-  $statement->execute();
-  $row = $statement->fetchAll();
-  $statement->closeCursor();
-  return $row;
-}
-
-function get_car_make($year)
-{
-  global $db;
-  $query = 'SELECT DISTINCT make
-            FROM CAR
-            WHERE year = :year
-            ORDER BY make';
-  $statement = $db->prepare($query);
-  $statement->bindValue(':year', $year);
-  $statement->execute();
-  $row = $statement->fetchAll();
-  $statement->closeCursor();
-  return $row;
-}
-
-function get_car_model($year, $make)
-{
-  global $db;
-  $query = 'SELECT DISTINCT model
-            FROM CAR
-            WHERE year = :year AND make = :make
-            ORDER BY model';
-  $statement = $db->prepare($query);
-  $statement->bindValue(':year', $year);
-  $statement->bindValue(':make', $make);
-  $statement->execute();
-  $row = $statement->fetchAll();
-  $statement->closeCursor();
-  return $row;
-}
-
-function get_car_engine($year, $make, $model)
-{
-  global $db;
-  $query = 'SELECT DISTINCT engine
-            FROM CAR
-            WHERE year = :year AND make = :make AND model = :model
-            ORDER BY engine';
-  $statement = $db->prepare($query);
-  $statement->bindValue(':year', $year);
-  $statement->bindValue(':make', $make);
-  $statement->bindValue(':model', $model);
-  $statement->execute();
-  $row = $statement->fetchAll();
-  $statement->closeCursor();
-  return $row;
-}
-
-function get_car_id($car)
-{
-  global $db;
-  $query = 'SELECT DISTINCT car_id
-            FROM CAR
-            WHERE year = :year AND make =:make AND model = :model AND engine = :engine';
-  $statement = $db->prepare($query);
-  $statement->bindValue(':year', $car['year']);
-  $statement->bindValue(':make', $car['make']);
-  $statement->bindValue(':model', $car['model']);
-  $statement->bindValue(':engine', $car['engine']);
-  $statement->execute();
-  $row = $statement->fetchAll();
-  $statement->closeCursor();
-  return $row;
-}
-
-function get_part_cat($crid)
-{
-  global $db;
-  $query = 'SELECT DISTINCT HAS_PARTS.category
-            FROM HAS_PARTS
-            WHERE HAS_PARTS.cr_id = :carid';
-  $statement = $db->prepare($query);
-  $statement->bindValue(':carid', $crid);
-  $statement->execute();
-  $row = $statement->fetchAll();
-  $statement->closeCursor();
-  return $row;
-}
-
-function get_products($cat, $id)
-{
-  global $db;
-  $query = 'SELECT DISTINCT PART.part_number, PART.brand, PART.name, PART.price, PART.description, PART.img_url, HAS_PARTS.category
-            FROM HAS_PARTS, PART
-            WHERE HAS_PARTS.cr_id = :carid AND HAS_PARTS.pt_num = PART.part_number AND HAS_PARTS.category = :cat';
-  $statement = $db->prepare($query);
-  $statement->bindValue(':carid', $id);
-  $statement->bindValue(':cat', $cat);
-  $statement->execute();
-  $row = $statement->fetchAll();
-  $statement->closeCursor();
-  return $row;
-}*/
 
 function get_prod_into($pnum)
 {
@@ -280,5 +174,105 @@ function insert_order($od_number, $sub, $tx, $tot)
     'sub' => $sub
   ));
   $statement->closeCursor();
+}
+function insert_order_products($od_number)
+{
+  global $db;
+  foreach ($_SESSION['cart'] as $pd_num) {
+    $query =
+      'INSERT INTO PRODUCTS_PURCHASED(od_num, pd_num, qt) VALUES (:odnum, :pd_num, :qt)';
+    $statement = $db->prepare($query);
+    $statement->execute(array(
+      'odnum' => $od_number,
+      'pd_num' => $pd_num,
+      'qt' => $_SESSION['quantiy'][$pd_num]
+    ));
+    $statement->closeCursor();
+  }
+}
+function getname()
+{
+  global $db;
+  $query = 'SELECT CLIENT.First_name, CLIENT.Last_name
+            FROM CLIENT
+            WHERE CLIENT.usrname = :uname';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':uname', $_SESSION['username']);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row;
+}
+function update_inv($pdnum)
+{
+  global $db;
+  $query = 'UPDATE PRODUCTS
+          SET PRODUCTS.num_stock = PRODUCTS.num_stock - :qt
+          WHERE PRODUCTS.product_number =:pdnum';
+  $statement = $db->prepare($query);
+  $statement->execute(array(
+    'qt' => $_SESSION['quantiy'][$pdnum],
+    'pdnum' => $pdnum
+  ));
+  $statement->closeCursor();
+}
+function get_orders()
+{
+  global $db;
+  $query = 'SELECT *
+            FROM ORDERS
+            WHERE ORDERS.cusername = :uname
+            ORDER BY date DESC';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':uname', $_SESSION['username']);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row;
+}
+
+function valid_order()
+{
+  global $db;
+  foreach ($_SESSION['cart'] as $pd) {
+    $query = 'SELECT num_stock
+              FROM PRODUCTS
+              WHERE product_number = :pnum';
+    $statement = $db->prepare($query);
+    $statement->bindValue(':pnum', $pd);
+    $statement->execute();
+    $row = $statement->fetchAll();
+    $statement->closeCursor();
+    if ($row[0]['num_stock'] < $_SESSION['quantiy'][$pd]) {
+      return false;
+    }
+  }
+  return true;
+}
+function get_items($odnum)
+{
+  global $db;
+  $query = 'SELECT PRODUCTS.name, PRODUCTS.price, PRODUCTS_PURCHASED.qt
+            FROM PRODUCTS, PRODUCTS_PURCHASED
+            WHERE PRODUCTS.product_number = PRODUCTS_PURCHASED.pd_num AND PRODUCTS_PURCHASED.od_num = :odnum';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':odnum', $odnum);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row;
+}
+function get_order($odnum)
+{
+  global $db;
+  $query = 'SELECT *
+            FROM ORDERS
+            WHERE ORDERS.order_number = :odnum';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':odnum', $odnum);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row;
 }
 ?>
