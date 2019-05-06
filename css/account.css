@@ -25,3 +25,6 @@ hr {
   border: 0;
   border-top: 1px solid white;
 }
+body {
+  padding-top: 56px;
+}

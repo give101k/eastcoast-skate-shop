@@ -70,47 +70,66 @@
     </div>
   </nav>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm-2 bar text-center">
-        <a href="?action=account">Orders</a>
+    <div class="row order">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col">
+            Order Date: 
+            <?php
+            $date = new DateTime($order[0]['date']);
+            echo $date->format('h:i a T m-d-Y');
+            ?>
+            <br>
+            Order Number: 
+            <?php echo $order[0]['order_number']; ?>
+          </div>
+          <div class="col text-center">
+            Status: 
+            <?php echo $order[0]['status']; ?> 
+            <br>
+              Client Username:
+              <?php echo $order[0]['cusername']; ?>
+          </div>
+          <div class="col text-right">
+            Total price: 
+            $<?php echo $order[0]['total_price']; ?>
+          </div>
+        </div>
+        <br>
+        <?php foreach ($items as $item): ?>
+        <hr>
+        <div class="row">
+          <div class="col">
+            Item:
+            <?php echo $item['name']; ?>
+          </div>
+          <div class="col text-center">
+            Quantity:
+            <?php echo $item['qt']; ?>
+          </div>
+          <div class="col text-right">
+            Price:
+            <?php echo $item['price']; ?>
+          </div>
+          </div>
+        <?php endforeach; ?> 
       </div>
-      <div class="col-sm-10"></div>
-    </div>
-    <?php foreach ($orders as $order): ?>
-    <div class="row">
-      <div class="col-sm-2"></div>
-        <div class="col-sm-10 ">
-          <div class="row order">
-            <div class="col">
-              Order Date: 
-              <?php
-              $date = new DateTime($order['date']);
-              echo $date->format('h:i a T m-d-Y');
-              ?>
-              <br>
-              Order Number: 
-              <?php echo $order['order_number']; ?>
-            </div>
-            <div class="col text-center">
-              Status: 
-              <?php echo $order['status']; ?>
-            </div>
-            <div class="col text-right">
-              Total price: 
-              $<?php echo $order['total_price']; ?>
-              <br>
-              <form action="." method="post">
-                <input type="hidden" name="action" value="details">
-                <input type="hidden" name="odnum" value="<?php echo $order[
-                  'order_number'
-                ]; ?>">
-                <input type="submit" class="btn btn-primary" value="Details">
-              </form>
-            </div>
+      <div class="row">
+        <div class="col">
+          <form action="." method="post">
+            <input type="hidden" name="action" value="updatestatus">
+            <input type="hidden" name="odnum" value="<?php echo $order[0][
+              'order_number'
+            ]; ?>">
+            <select name="status" id="" class="form-control">
+              <option value="ordered">Ordered</option>
+              <option value="shipped">Shipped</option>
+            </select>
+            <input type="submit" class="btn btn-primary" value="Update">
+          </form>
         </div>
       </div>
     </div>
-    <?php endforeach; ?>
   </div>
   </body>
 </html>

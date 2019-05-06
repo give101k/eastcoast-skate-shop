@@ -331,4 +331,23 @@ function clear_cart()
   ));
   $statement->closeCursor();
 }
+function get_all_orders()
+{
+  global $db;
+  $query = 'SELECT *
+            FROM ORDERS';
+  $statement = $db->prepare($query);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row;
+}
+function updatestatus($odnum, $stat)
+{
+  global $db;
+  $query = 'UPDATE ORDERS SET status = :status WHERE cusername = :odnum';
+  $statement = $db->prepare($query);
+  $statement->execute(array());
+  $statement->closeCursor();
+}
 ?>

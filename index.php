@@ -35,7 +35,7 @@ switch ($action) {
       $_SESSION['is_valid'] = true;
       $_SESSION['username'] = $user;
       if (usr_type($user) == "admin") {
-        include 'admin.php';
+        include 'view/admin.php';
       } elseif (usr_type($user) == "client") {
         load_cart();
         if (!empty($_SESSION['cart'])) {
@@ -56,7 +56,19 @@ switch ($action) {
       include 'view/login.php';
     }
     break;
-
+  case 'adminhome':
+    include 'view/admin.php';
+    break;
+  case 'adminorders':
+    $orders = get_all_orders();
+    include 'view/adminorders.php';
+    break;
+  case 'admindetails':
+    $odnum = filter_input(INPUT_POST, 'odnum');
+    $order = get_order($odnum);
+    $items = get_items($odnum);
+    include 'view/admindetails.php';
+    break;
   case 'home':
     include 'view/home.php';
     break;
@@ -206,6 +218,14 @@ switch ($action) {
     add_user($username, $fname, $lname, $add, $town, $state);
     add_user_pass($username, $hash);
     include 'view/login.php';
+    break;
+  case 'updatestatus':
+    $status = filter_input(INPUT_POST, 'status');
+    $odnum = filter_input(INPUT_POST, 'odnum');
+    updatestatus($odnum, $status);
+    $order = get_order($odnum);
+    $items = get_items($odnum);
+    include 'view/admindetails.php';
     break;
 }
 ?>

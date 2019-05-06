@@ -30,28 +30,10 @@
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="?action=home">Home</a>
+          <a class="nav-link" href="?action=adminhome">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="?action=products&cat=all">Products</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="?action=account">My Account</a>
-        </li>
-        <?php if ($_SESSION['is_valid'] == false): ?>
-        <li class="nav-item">
-          <a class="nav-link" href="?action=reg">Register</a>
-        </li>
-        <?php endif; ?>
-        <li class="nav-item">
-          <a class="nav-link" href="index.php?action=cart"> Cart <i class="fas fa-shopping-cart"></i>
-            <span class="label label-primary"></span>
-              <?php echo $_SESSION['cartqt']; ?>
-            </span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="">Contact Us</a>
+          <a class="nav-link active" href="?action=adminorders">adminorders</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0" action="index.php">
@@ -70,7 +52,7 @@
     </div>
   </nav>
   <div class="container-fluid">
-    <div class="row">
+  <div class="row">
       <div class="col-sm-2 bar text-center">
         <a href="?action=account">Orders</a>
       </div>
@@ -94,13 +76,16 @@
             <div class="col text-center">
               Status: 
               <?php echo $order['status']; ?>
+              <br>
+              Client Username:
+              <?php echo $order['cusername']; ?>
             </div>
             <div class="col text-right">
               Total price: 
               $<?php echo $order['total_price']; ?>
               <br>
               <form action="." method="post">
-                <input type="hidden" name="action" value="details">
+                <input type="hidden" name="action" value="admindetails">
                 <input type="hidden" name="odnum" value="<?php echo $order[
                   'order_number'
                 ]; ?>">
