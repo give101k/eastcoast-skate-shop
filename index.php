@@ -146,6 +146,7 @@ switch ($action) {
       $total = $subtotal + $tax;
       insert_order($odnum, $subtotal, $tax, $total);
       insert_order_products($odnum);
+      clear_cart();
       foreach ($_SESSION['cart'] as $p) {
         update_inv($p);
       }
@@ -181,7 +182,30 @@ switch ($action) {
     break;
 
   case 'reg':
+    $message = null;
     include 'view/register.php';
+    break;
+  case 'submit':
+    $fname = filter_input(INPUT_POST, 'fname');
+    $lname = filter_input(INPUT_POST, 'lname');
+    $username = filter_input(INPUT_POST, 'username');
+    $pass = filter_input(INPUT_POST, 'pass');
+    $confirmpass = filter_input(INPUT_POST, 'confirmpass');
+    $add = filter_input(INPUT_POST, 'add');
+    $town = filter_input(INPUT_POST, 'town');
+    $state = filter_input(INPUT_POST, 'state');
+    if ($pass != $confirmpass) {
+      $message = "Passwords do not match";
+      include 'view/register.php';
+    }
+    if (valid_user($username) == false) {
+      $message = "Please pick a different Username. That one has been taken.";
+      include 'view/register.php';
+    }
+    $hash = password_hash($pass, PASSWORD_BCRYPT);
+    add_user($username, $fname, $lname, $add, $town, $state);
+    add_user_pass($username, $hash);
+    include 'view/login.php';
     break;
 }
 ?>

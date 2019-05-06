@@ -201,7 +201,7 @@ function getname()
   $statement->execute();
   $row = $statement->fetchAll();
   $statement->closeCursor();
-  return $row;
+  return $row[0];
 }
 function update_inv($pdnum)
 {
@@ -274,5 +274,61 @@ function get_order($odnum)
   $row = $statement->fetchAll();
   $statement->closeCursor();
   return $row;
+}
+function valid_user($uname)
+{
+  global $db;
+  $query = 'SELECT usrname
+            FROM CLIENT
+            WHERE usrname = :uname';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':uname', $uname);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  if ($row == null) {
+    return true;
+  } else {
+    return false;
+  }
+}
+function add_user($username, $fname, $lname, $add, $town, $state)
+{
+  global $db;
+  $query = 'INSERT INTO CLIENT(usrname, First_name, Last_name, address, town, state) 
+            VALUES (:username, :fname, :lname, :add, :town, :state)';
+  $statement = $db->prepare($query);
+  $statement->execute(array(
+    'username' => $username,
+    'fname' => $fname,
+    'lname' => $lname,
+    'add' => $add,
+    'town' => $town,
+    'state' => $state
+  ));
+  $statement->closeCursor();
+}
+function add_user_pass($username, $pass)
+{
+  global $db;
+  $query = 'INSERT INTO USERS(username, password, type_usr)  
+            VALUES (:username, :pass, :type)';
+  $statement = $db->prepare($query);
+  $statement->execute(array(
+    'username' => $username,
+    'pass' => $pass,
+    'type' => "client"
+  ));
+  $statement->closeCursor();
+}
+function clear_cart()
+{
+  global $db;
+  $query = 'DELETE FROM `CART` WHERE `cname` = :username';
+  $statement = $db->prepare($query);
+  $statement->execute(array(
+    'username' => $_SESSION['username']
+  ));
+  $statement->closeCursor();
 }
 ?>

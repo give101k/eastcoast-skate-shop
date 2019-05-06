@@ -70,9 +70,9 @@
     </div>
   </nav>
   <div class="thank">
-    <h1>Thank you <?php echo $name[0]['First_name'] .
+    <h1>Thank you <?php echo $name['First_name'] .
       " " .
-      $name[0]['Last_name']; ?> for the purchase
+      $name['Last_name']; ?> for the purchase
     </h1>
   </div>
   </body>

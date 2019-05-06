@@ -9,7 +9,7 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" type="text/css" href="css/account.css" />
+    <link rel="stylesheet" type="text/css" href="css/reg.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -70,7 +70,93 @@
     </div>
   </nav>
   <div class="container-fluid">
-    
+    <div class="card reg">
+      <h1 class="text-center">Regster</h1>
+      <?php if ($message != null): ?>
+        <div class="alert-danger alert top">
+          <?php echo $message; ?>
+        </div>
+      <?php endif; ?>
+      <form action="." method="post">
+        <input type="hidden" name="action" value="submit">
+        First Name:
+        <input type="text" class="form-control" name="fname" require>
+        <br>
+        Last Name:
+        <input type="text" class="form-control" name="lname" require>
+        <br>
+        Username:
+        <input type="text" class="form-control" name="username" require>
+        <br>
+        Password:
+        <input type="password" class="form-control" name="pass" require>
+        <br>
+        Confirm Password:
+        <input type="password" class="form-control" name="confirmpass" require>
+        <br>
+        Address:
+        <input type="text" class="form-control" name="add" require>
+        <br>
+        Town:
+        <input type="text" class="form-control" name="town" require>
+        <br>
+        State: 
+        <select class="form-control" name="state" require>
+          <option value="AL">Alabama</option>
+          <option value="AK">Alaska</option>
+          <option value="AZ">Arizona</option>
+          <option value="AR">Arkansas</option>
+          <option value="CA">California</option>
+          <option value="CO">Colorado</option>
+          <option value="CT">Connecticut</option>
+          <option value="DE">Delaware</option>
+          <option value="DC">District Of Columbia</option>
+          <option value="FL">Florida</option>
+          <option value="GA">Georgia</option>
+          <option value="HI">Hawaii</option>
+          <option value="ID">Idaho</option>
+          <option value="IL">Illinois</option>
+          <option value="IN">Indiana</option>
+          <option value="IA">Iowa</option>
+          <option value="KS">Kansas</option>
+          <option value="KY">Kentucky</option>
+          <option value="LA">Louisiana</option>
+          <option value="ME">Maine</option>
+          <option value="MD">Maryland</option>
+          <option value="MA">Massachusetts</option>
+          <option value="MI">Michigan</option>
+          <option value="MN">Minnesota</option>
+          <option value="MS">Mississippi</option>
+          <option value="MO">Missouri</option>
+          <option value="MT">Montana</option>
+          <option value="NE">Nebraska</option>
+          <option value="NV">Nevada</option>
+          <option value="NH">New Hampshire</option>
+          <option value="NJ">New Jersey</option>
+          <option value="NM">New Mexico</option>
+          <option value="NY">New York</option>
+          <option value="NC">North Carolina</option>
+          <option value="ND">North Dakota</option>
+          <option value="OH">Ohio</option>
+          <option value="OK">Oklahoma</option>
+          <option value="OR">Oregon</option>
+          <option value="PA">Pennsylvania</option>
+          <option value="RI">Rhode Island</option>
+          <option value="SC">South Carolina</option>
+          <option value="SD">South Dakota</option>
+          <option value="TN">Tennessee</option>
+          <option value="TX">Texas</option>
+          <option value="UT">Utah</option>
+          <option value="VT">Vermont</option>
+          <option value="VA">Virginia</option>
+          <option value="WA">Washington</option>
+          <option value="WV">West Virginia</option>
+          <option value="WI">Wisconsin</option>
+          <option value="WY">Wyoming</option>
+        </select>		
+        <input type="submit" class="btn btn-primary space" require>		
+      </form>
+    </div>
   </div>
   </body>
 </html>
