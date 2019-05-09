@@ -20,6 +20,9 @@ if (!isset($_SESSION['cartqt'])) {
 if (!isset($_SESSION['quantity'])) {
   $_SESSION['quantity'] = array();
 }
+if (!isset($_SESSION['user_type'])) {
+  $_SESSION['user_type'] = '';
+}
 
 // if there is no action it sets the default action
 $action = filter_input(INPUT_POST, 'action');
@@ -49,6 +52,7 @@ switch ($action) {
         include 'view/admin.php';
       } elseif (usr_type($user) == "client") {
         load_cart();
+        $_SESSION['user_type'] = 'client';
         if (!empty($_SESSION['cart'])) {
           $_SESSION['cartqt'] = array_sum($_SESSION['quantity']);
         } else {
@@ -77,7 +81,7 @@ switch ($action) {
   // gets all orders from database and displays them
   case 'adminorders':
     $orders = get_all_orders();
-    include 'view/adminorders.php';
+    include 'view/admin_orders.php';
     break;
 
   // case for when admin click on details button
@@ -86,7 +90,7 @@ switch ($action) {
     $odnum = filter_input(INPUT_POST, 'odnum');
     $order = get_order($odnum);
     $items = get_items($odnum);
-    include 'view/admindetails.php';
+    include 'view/admin_details.php';
     break;
 
   // case for home button
@@ -171,7 +175,7 @@ switch ($action) {
 
   // case for when user checksout
   // it will make user login if they are not already
-  // it tthen will proccess the order and put it in the database
+  // it then will proccess the order and put it in the database
   case 'checkout':
     if ($_SESSION['is_valid'] == false) {
       include 'view/login.php';
@@ -266,7 +270,7 @@ switch ($action) {
     updatestatus($odnum, $status);
     $order = get_order($odnum);
     $items = get_items($odnum);
-    include 'view/admindetails.php';
+    include 'view/admin_details.php';
     break;
 }
 ?>
