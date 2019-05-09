@@ -1,10 +1,12 @@
 <?php
+//set the default timezone and starts the session and loades required files
 date_default_timezone_set('America/New_York');
 session_start();
 require_once "model/database.php";
 require_once "model/login_func.php";
 require_once 'model/data_func.php';
 
+// sets the login messages to null and sets default session values
 $login_message = "";
 if (!isset($_SESSION['is_valid'])) {
   $_SESSION['is_valid'] = false;
@@ -15,19 +17,27 @@ if (!isset($_SESSION['cart'])) {
 if (!isset($_SESSION['cartqt'])) {
   $_SESSION['cartqt'] = 0;
 }
-if (!isset($_SESSION['quantiy'])) {
-  $_SESSION['quantiy'] = array();
+if (!isset($_SESSION['quantity'])) {
+  $_SESSION['quantity'] = array();
 }
 
+// if there is no action it sets the default action
 $action = filter_input(INPUT_POST, 'action');
 if ($action == null) {
   $action = filter_input(INPUT_GET, 'action');
   if ($action == null) {
-    $action = 'home';
+    if ($_SESSION['user_type'] == 'admin') {
+      $action = 'adminhome';
+    } else {
+      $action = 'home';
+    }
   }
 }
 
 switch ($action) {
+  // Case for when the user will login admin or client
+  // check username and password against the datebase
+  // if it is valid login it redirects to the right page for that user
   case 'login':
     $user = filter_input(INPUT_POST, 'email');
     $password = filter_input(INPUT_POST, 'password');
@@ -35,11 +45,12 @@ switch ($action) {
       $_SESSION['is_valid'] = true;
       $_SESSION['username'] = $user;
       if (usr_type($user) == "admin") {
+        $_SESSION['user_type'] = 'admin';
         include 'view/admin.php';
       } elseif (usr_type($user) == "client") {
         load_cart();
         if (!empty($_SESSION['cart'])) {
-          $_SESSION['cartqt'] = array_sum($_SESSION['quantiy']);
+          $_SESSION['cartqt'] = array_sum($_SESSION['quantity']);
         } else {
           $_SESSION['cartqt'] = 0;
         }
@@ -56,23 +67,34 @@ switch ($action) {
       include 'view/login.php';
     }
     break;
+
+  // case for the admin home page
   case 'adminhome':
     include 'view/admin.php';
     break;
+
+  // case of the admin orders page
+  // gets all orders from database and displays them
   case 'adminorders':
     $orders = get_all_orders();
     include 'view/adminorders.php';
     break;
+
+  // case for when admin click on details button
+  // gets order details to dispaly to user
   case 'admindetails':
     $odnum = filter_input(INPUT_POST, 'odnum');
     $order = get_order($odnum);
     $items = get_items($odnum);
     include 'view/admindetails.php';
     break;
+
+  // case for home button
   case 'home':
     include 'view/home.php';
     break;
 
+  // case for when user logs out
   case 'logout':
     session_unset();
     session_destroy();
@@ -80,6 +102,8 @@ switch ($action) {
     include 'view/login.php';
     break;
 
+  // case for product page
+  // will diplay products bassed on thier category
   case 'products':
     $cat = filter_input(INPUT_GET, 'cat');
     switch ($cat) {
@@ -105,12 +129,15 @@ switch ($action) {
     include 'view/products.php';
     break;
 
+  // case for when user click on buy button
+  // gets the product number adds it to the cart to keep track
+  // if it is already in the cart it will just display the cart but will not add another
   case 'buy':
     $product = filter_input(INPUT_POST, 'product');
     if (in_cart($product) == false) {
       array_push($_SESSION['cart'], $product);
-      $_SESSION['quantiy'][$product] = 1;
-      $_SESSION['cartqt'] = array_sum($_SESSION['quantiy']);
+      $_SESSION['quantity'][$product] = 1;
+      $_SESSION['cartqt'] = array_sum($_SESSION['quantity']);
       if ($_SESSION['is_valid'] == true) {
         update_cart($product);
       }
@@ -121,25 +148,30 @@ switch ($action) {
     include 'view/cart.php';
     break;
 
+  // case for the user update the quantity
+  // gets the number update if 0 removes it from the cart other wise updates the quantity
   case 'cartupdate':
     $qt = filter_input(INPUT_POST, 'updateqt');
     $ptnum = filter_input(INPUT_POST, 'pnum');
     if ($qt == 0 && in_array($ptnum, $_SESSION['cart']) == true) {
       $key = array_search($ptnum, $_SESSION['cart']);
       array_splice($_SESSION['cart'], $key, $key + 1);
-      unset($_SESSION['quantiy'][$ptnum]);
+      unset($_SESSION['quantity'][$ptnum]);
       if ($_SESSION['is_valid'] == true) {
         remove_item_from_cart($ptnum);
       }
     }
-    $_SESSION['quantiy'][$ptnum] = $qt;
+    $_SESSION['quantity'][$ptnum] = $qt;
     for ($i = 0; $i < sizeof($_SESSION['cart']); $i++) {
       $prod[$i] = get_prod_into($_SESSION['cart'][$i]);
     }
-    $_SESSION['cartqt'] = array_sum($_SESSION['quantiy']);
+    $_SESSION['cartqt'] = array_sum($_SESSION['quantity']);
     include 'view/cart.php';
     break;
 
+  // case for when user checksout
+  // it will make user login if they are not already
+  // it tthen will proccess the order and put it in the database
   case 'checkout':
     if ($_SESSION['is_valid'] == false) {
       include 'view/login.php';
@@ -152,7 +184,7 @@ switch ($action) {
         $prod[$i] = get_prod_into($_SESSION['cart'][$i]);
       }
       foreach ($prod as $p) {
-        $subtotal += $p['price'] * $_SESSION['quantiy'][$p['product_number']];
+        $subtotal += $p['price'] * $_SESSION['quantity'][$p['product_number']];
       }
       $tax = $subtotal * 0.06;
       $total = $subtotal + $tax;
@@ -164,7 +196,7 @@ switch ($action) {
       }
       $_SESSION['cart'] = array();
       $_SESSION['cartqt'] = 0;
-      $_SESSION['quantiy'] = array();
+      $_SESSION['quantity'] = array();
       $name = getname();
       include 'view/purchaced.php';
     } elseif (valid_order() == false) {
@@ -172,12 +204,14 @@ switch ($action) {
     }
     break;
 
+  // case for when the user click on thier cart
   case 'cart':
     for ($i = 0; $i < sizeof($_SESSION['cart']); $i++) {
       $prod[$i] = get_prod_into($_SESSION['cart'][$i]);
     }
     include 'view/cart.php';
     break;
+  // case for when the user click on thier account
   case 'account':
     if ($_SESSION['is_valid'] == false) {
       include 'view/login.php';
@@ -186,6 +220,8 @@ switch ($action) {
       include 'view/account.php';
     }
     break;
+
+  // case for when they click on the dtails of thier order
   case 'details':
     $odnum = filter_input(INPUT_POST, 'odnum');
     $order = get_order($odnum);
@@ -193,10 +229,13 @@ switch ($action) {
     include 'view/details.php';
     break;
 
+  // case for when the new user click on regester
   case 'reg':
     $message = null;
     include 'view/register.php';
     break;
+
+  // case for when the user submits thier form for regestering
   case 'submit':
     $fname = filter_input(INPUT_POST, 'fname');
     $lname = filter_input(INPUT_POST, 'lname');
@@ -219,6 +258,8 @@ switch ($action) {
     add_user_pass($username, $hash);
     include 'view/login.php';
     break;
+
+  // case for when the admin updates the status of the order
   case 'updatestatus':
     $status = filter_input(INPUT_POST, 'status');
     $odnum = filter_input(INPUT_POST, 'odnum');
