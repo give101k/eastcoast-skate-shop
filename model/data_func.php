@@ -58,7 +58,7 @@ function load_cart()
   } else {
     foreach ($row as $prod) {
       array_push($_SESSION['cart'], $prod['part']);
-      $_SESSION['quantiy'][$prod['part']] = $prod['qyt'];
+      $_SESSION['quantity'][$prod['part']] = $prod['qyt'];
     }
   }
 }
@@ -185,7 +185,7 @@ function insert_order_products($od_number)
     $statement->execute(array(
       'odnum' => $od_number,
       'pd_num' => $pd_num,
-      'qt' => $_SESSION['quantiy'][$pd_num]
+      'qt' => $_SESSION['quantity'][$pd_num]
     ));
     $statement->closeCursor();
   }
@@ -211,7 +211,7 @@ function update_inv($pdnum)
           WHERE PRODUCTS.product_number =:pdnum';
   $statement = $db->prepare($query);
   $statement->execute(array(
-    'qt' => $_SESSION['quantiy'][$pdnum],
+    'qt' => $_SESSION['quantity'][$pdnum],
     'pdnum' => $pdnum
   ));
   $statement->closeCursor();
@@ -243,7 +243,7 @@ function valid_order()
     $statement->execute();
     $row = $statement->fetchAll();
     $statement->closeCursor();
-    if ($row[0]['num_stock'] < $_SESSION['quantiy'][$pd]) {
+    if ($row[0]['num_stock'] < $_SESSION['quantity'][$pd]) {
       return false;
     }
   }

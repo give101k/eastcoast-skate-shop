@@ -89,9 +89,9 @@
           <input type="hidden" name="pnum" value="<?php echo $pd[
             'product_number'
           ]; ?>" />
-          <input type="number" name="updateqt" class="form-control ml-auto " value="<?php echo $_SESSION['quantiy'][
-              $pd['product_number']
-            ]; ?>" />
+          <input type="number" name="updateqt" class="form-control ml-auto " value="<?php echo $_SESSION[
+            'quantity'
+          ][$pd['product_number']]; ?>" />
           <input type="submit" class="btn btn-primary ml-auto updatebt " value="Update" />
         </form>
         <form action="." method="post">
@@ -108,7 +108,7 @@
         <h3>
           <?php echo '$' .
             number_format(
-              $pd['price'] * $_SESSION['quantiy'][$pd['product_number']],
+              $pd['price'] * $_SESSION['quantity'][$pd['product_number']],
               2
             ); ?>
         </h3>
@@ -130,7 +130,7 @@
           if (isset($prod)) {
             foreach ($prod as $p) {
               $subtotal +=
-                $p['price'] * $_SESSION['quantiy'][$p['product_number']];
+                $p['price'] * $_SESSION['quantity'][$p['product_number']];
             }
           }
           echo '$' . number_format($subtotal, 2);
