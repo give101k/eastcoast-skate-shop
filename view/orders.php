@@ -1,29 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>EastCost Skate Shop</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" type="text/css" href="css/account.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  </head>
-  <body>
+
+<head>
+  <title>EastCost Skate Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <link rel="stylesheet" type="text/css" href="css/account.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
   <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
     <a class="navbar-brand" href="index.php?action=home">EastCost Skate Shop</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#collapsibleNavbar"
-    >
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -52,7 +46,7 @@
     </div>
   </nav>
   <div class="container-fluid">
-  <div class="row">
+    <div class="row">
       <div class="col-sm-2 bar text-center">
         <a href="?action=account">Orders</a>
       </div>
@@ -61,38 +55,39 @@
     <?php foreach ($orders as $order): ?>
     <div class="row">
       <div class="col-sm-2"></div>
-        <div class="col-sm-10 ">
-          <div class="row order">
-            <div class="col">
-              Order Date: 
-              <?php
-              $date = new DateTime($order['date']);
-              echo $date->format('h:i a T m-d-Y');
-              ?>
-              <br>
-              Order Number: 
-              <?php echo $order['order_number']; ?>
-            </div>
-            <div class="col text-center">
-              Status: 
-              <?php echo $order['status']; ?>
-            </div>
-            <div class="col text-right">
-              Total price: 
-              $<?php echo $order['total_price']; ?>
-              <br>
-              <form action="." method="post">
-                <input type="hidden" name="action" value="admindetails">
-                <input type="hidden" name="odnum" value="<?php echo $order[
-                  'order_number'
-                ]; ?>">
-                <input type="submit" class="btn btn-primary" value="Details">
-              </form>
-            </div>
+      <div class="col-sm-10 ">
+        <div class="row order">
+          <div class="col">
+            Order Date:
+            <?php
+            $date = new DateTime($order['date']);
+            echo $date->format('h:i a T m-d-Y');
+            ?>
+            <br>
+            Order Number:
+            <?php echo $order['order_number']; ?>
+          </div>
+          <div class="col text-center">
+            Status:
+            <?php echo $order['status']; ?>
+          </div>
+          <div class="col text-right">
+            Total price:
+            $<?php echo $order['total_price']; ?>
+            <br>
+            <form action="." method="post">
+              <input type="hidden" name="action" value="admindetails">
+              <input type="hidden" name="odnum" value="<?php echo $order[
+                'order_number'
+              ]; ?>">
+              <input type="submit" class="btn btn-primary" value="Details">
+            </form>
+          </div>
         </div>
       </div>
     </div>
     <?php endforeach; ?>
   </div>
-  </body>
+</body>
+
 </html>

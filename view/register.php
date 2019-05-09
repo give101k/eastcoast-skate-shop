@@ -1,29 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>EastCost Skate Shop</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" type="text/css" href="css/reg.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  </head>
-  <body>
+
+<head>
+  <title>EastCost Skate Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <link rel="stylesheet" type="text/css" href="css/reg.css" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <a class="navbar-brand" href="index.php?action=home">EastCost Skate Shop</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#collapsibleNavbar"
-    >
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -46,7 +40,7 @@
         <li class="nav-item">
           <a class="nav-link" href="index.php?action=cart"> Cart <i class="fas fa-shopping-cart"></i>
             <span class="label label-primary"></span>
-              <?php echo $_SESSION['cartqt']; ?>
+            <?php echo $_SESSION['cartqt']; ?>
             </span>
           </a>
         </li>
@@ -73,9 +67,9 @@
     <div class="card reg">
       <h1 class="text-center">Regster</h1>
       <?php if ($message != null): ?>
-        <div class="alert-danger alert top">
-          <?php echo $message; ?>
-        </div>
+      <div class="alert-danger alert top">
+        <?php echo $message; ?>
+      </div>
       <?php endif; ?>
       <form action="." method="post">
         <input type="hidden" name="action" value="submit">
@@ -100,7 +94,7 @@
         Town:
         <input type="text" class="form-control" name="town" require>
         <br>
-        State: 
+        State:
         <select class="form-control" name="state" require>
           <option value="AL">Alabama</option>
           <option value="AK">Alaska</option>
@@ -153,10 +147,11 @@
           <option value="WV">West Virginia</option>
           <option value="WI">Wisconsin</option>
           <option value="WY">Wyoming</option>
-        </select>		
-        <input type="submit" class="btn btn-primary space" require>		
+        </select>
+        <input type="submit" class="btn btn-primary space" require>
       </form>
     </div>
   </div>
-  </body>
+</body>
+
 </html>

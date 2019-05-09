@@ -345,9 +345,12 @@ function get_all_orders()
 function updatestatus($odnum, $stat)
 {
   global $db;
-  $query = 'UPDATE ORDERS SET status = :status WHERE cusername = :odnum';
+  $query = 'UPDATE ORDERS SET status = :status WHERE order_number = :odnum';
   $statement = $db->prepare($query);
-  $statement->execute(array());
+  $statement->execute(array(
+    'odnum' => $odnum,
+    'status' => $stat
+  ));
   $statement->closeCursor();
 }
 ?>
