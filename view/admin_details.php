@@ -16,7 +16,7 @@
 
 <body>
   <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
-    <a class="navbar-brand" href="index.php?action=home">EastCost Skate Shop</a>
+    <a class="navbar-brand" href="index.php?action=adminhome">EastCost Skate Shop</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -27,7 +27,7 @@
           <a class="nav-link" href="?action=adminhome">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="?action=adminorders">adminorders</a>
+          <a class="nav-link active" href="?action=adminorders">Orders</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0" action="index.php">
