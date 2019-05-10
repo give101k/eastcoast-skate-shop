@@ -335,7 +335,8 @@ function get_all_orders()
 {
   global $db;
   $query = 'SELECT *
-            FROM ORDERS';
+            FROM ORDERS
+            ORDER BY date DESC';
   $statement = $db->prepare($query);
   $statement->execute();
   $row = $statement->fetchAll();
@@ -352,5 +353,61 @@ function updatestatus($odnum, $stat)
     'status' => $stat
   ));
   $statement->closeCursor();
+}
+function get_info($uname)
+{
+  global $db;
+  $query = 'SELECT CLIENT.First_name, CLIENT.Last_name, CLIENT.address, CLIENT.town, CLIENT.state
+            FROM CLIENT 
+            WHERE CLIENT.usrname = :uname';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':uname', $uname);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row[0];
+}
+function insert_product(
+  $pnum,
+  $brand,
+  $name,
+  $price,
+  $stocknum,
+  $desc,
+  $imgurl,
+  $cat
+) {
+  global $db;
+  $query = 'INSERT INTO PRODUCTS(product_number, brand, name, price, num_stock, description, img_url, categories) 
+            VALUES (:product_number, :brand, :name, :price, :num_stock, :description, :img_url, :categories)';
+  $statement = $db->prepare($query);
+  $statement->execute([
+    'product_number' => $pnum,
+    'brand' => $brand,
+    'name' => $name,
+    'price' => $price,
+    'num_stock' => $stocknum,
+    'description' => $desc,
+    'img_url' => $imgurl,
+    'categories' => $cat
+  ]);
+  $statement->closeCursor();
+}
+function product_exist($pnum)
+{
+  global $db;
+  $query = 'SELECT PRODUCTS.product_number
+            FROM PRODUCTS 
+            WHERE PRODUCTS.product_number = :pnum';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':pnum', $pnum);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  if ($row == null) {
+    return false;
+  } else {
+    return true;
+  }
 }
 ?>
