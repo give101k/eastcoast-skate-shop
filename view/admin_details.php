@@ -29,6 +29,9 @@
         <li class="nav-item">
           <a class="nav-link active" href="?action=adminorders">Orders</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="?action=addproductpage">Add Products</a>
+        </li>
       </ul>
       <form class="form-inline my-2 my-lg-0" action="index.php">
         <?php if ($_SESSION['is_valid'] == true): ?>
@@ -70,6 +73,22 @@
             <div class="col text-right">
               Total price: $<?php echo $order[0]['total_price']; ?>
             </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col">
+              First Name: <?php echo $info['First_name']; ?>
+              <br>
+              Last Name: <?php echo $info['Last_name']; ?>
+            </div>
+            <div class="col text-center">
+              Address: <?php echo $info['address']; ?>
+              <br>
+              Town: <?php echo $info['town']; ?>
+              <br>
+              State: <?php echo $info['state']; ?>
+            </div>
+            <div class="col"></div>
           </div>
           <br />
           <?php foreach ($items as $item): ?>
