@@ -79,7 +79,7 @@
             Order Date:
             <?php
             $date = new DateTime($order['date']);
-            echo $date->format('h:i a T m-d-Y');
+            echo $date->format('m-d-Y h:i a T');
             ?>
             <br>
             Order Number:

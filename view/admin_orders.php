@@ -29,6 +29,9 @@
         <li class="nav-item">
           <a class="nav-link active" href="?action=adminorders">Orders</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="?action=addproductpage">Add Products</a>
+        </li>
       </ul>
       <form class="form-inline my-2 my-lg-0" action="index.php">
         <?php if ($_SESSION['is_valid'] == true): ?>
@@ -61,7 +64,7 @@
             Order Date:
             <?php
             $date = new DateTime($order['date']);
-            echo $date->format('h:i a T m-d-Y');
+            echo $date->format('m-d-Y h:i a T');
             ?>
             <br>
             Order Number:
