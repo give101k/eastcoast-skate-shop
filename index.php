@@ -72,27 +72,6 @@ switch ($action) {
     }
     break;
 
-  // case for the admin home page
-  case 'adminhome':
-    include 'view/admin.php';
-    break;
-
-  // case of the admin orders page
-  // gets all orders from database and displays them
-  case 'adminorders':
-    $orders = get_all_orders();
-    include 'view/admin_orders.php';
-    break;
-
-  // case for when admin click on details button
-  // gets order details to dispaly to user
-  case 'admindetails':
-    $odnum = filter_input(INPUT_POST, 'odnum');
-    $order = get_order($odnum);
-    $items = get_items($odnum);
-    include 'view/admin_details.php';
-    break;
-
   // case for home button
   case 'home':
     include 'view/home.php';
@@ -263,6 +242,28 @@ switch ($action) {
     include 'view/login.php';
     break;
 
+  // case for the admin home page
+  case 'adminhome':
+    include 'view/admin.php';
+    break;
+
+  // case of the admin orders page
+  // gets all orders from database and displays them
+  case 'adminorders':
+    $orders = get_all_orders();
+    include 'view/admin_orders.php';
+    break;
+
+  // case for when admin click on details button
+  // gets order details to dispaly to user
+  case 'admindetails':
+    $odnum = filter_input(INPUT_POST, 'odnum');
+    $order = get_order($odnum);
+    $info = get_info($order[0]['cusername']);
+    $items = get_items($odnum);
+    include 'view/admin_details.php';
+    break;
+
   // case for when the admin updates the status of the order
   case 'updatestatus':
     $status = filter_input(INPUT_POST, 'status');
@@ -271,6 +272,40 @@ switch ($action) {
     $order = get_order($odnum);
     $items = get_items($odnum);
     include 'view/admin_details.php';
+    break;
+
+  // case for when employee wants to add product
+  case 'addproduct':
+    $pnum = filter_input(INPUT_POST, 'pnum');
+    $brand = filter_input(INPUT_POST, 'brand');
+    $name = filter_input(INPUT_POST, 'name');
+    $price = filter_input(INPUT_POST, 'price');
+    $stocknum = filter_input(INPUT_POST, 'stocknum');
+    $desc = filter_input(INPUT_POST, 'desc');
+    $imgurl = filter_input(INPUT_POST, 'imgurl');
+    $cat = filter_input(INPUT_POST, 'cat');
+
+    if (product_exist($pnum) == false) {
+      $add_message = 'Product Added';
+      insert_product(
+        $pnum,
+        $brand,
+        $name,
+        $price,
+        $stocknum,
+        $desc,
+        $imgurl,
+        $cat
+      );
+    } else {
+      $add_message = 'Product Number already exist';
+    }
+
+    include 'view/addproducts.php';
+    break;
+
+  case 'addproductpage':
+    include 'view/addproducts.php';
     break;
 }
 ?>
