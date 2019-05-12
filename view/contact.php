@@ -3,11 +3,10 @@
 
 <head>
   <title>EastCost Skate Shop</title>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
-  <link rel="stylesheet" type="text/css" href="css/products.css" />
-  <script type="text/javascript" src="javascript/prod.js"></script>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -28,7 +27,7 @@
         <li class="nav-item">
           <a class="nav-link" href="?action=home">Home</a>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="?action=products&cat=all">Products</a>
         </li>
         <li class="nav-item">
@@ -47,7 +46,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="?action=contact">Contact Us</a>
+          <a class="nav-link active" href="?action=contact">Contact Us</a>
         </li>
       </ul>
       <form class="navbar-form" action="." method="get" role="search">
@@ -74,48 +73,13 @@
       </form>
     </div>
   </nav>
-  <div class="fluid-container">
-    <div id="mySidenav" class="sidenav">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="?action=products&cat=all">All</a>
-      <a href="?action=products&cat=decks">Decks</a>
-      <a href="?action=products&cat=trucks">Trucks</a>
-      <a href="?action=products&cat=bearings">Bearings</a>
-      <a href="?action=products&cat=wheels">Wheels</a>
-      <a href="?action=products&cat=acc">Accessories</a>
-    </div>
-    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;Categories</span>
-    <div class="card-columns">
-      <?php foreach ($products as $pd): ?>
-      <div class="card">
-        <img src="<?php echo $pd[
-          'img_url'
-        ]; ?>" alt="" class="card-img-top max">
-        <div class="card-body">
-          <h4 class="card-title"><?php echo $pd['name']; ?></h4>
-          <p class="card-text">
-            Brand:
-            <?php echo $pd['brand']; ?>
-            <br>
-            Description:
-            <?php echo $pd['description']; ?>
-            <br>
-            Price: $
-            <?php echo $pd['price']; ?>
-            <br>
-            Number in stock:
-            <?php echo $pd['num_stock']; ?>
-          </p>
-          <form action="." method="post">
-            <input type="hidden" name="action" value="buy">
-            <input type="hidden" name="product" value="<?php echo $pd[
-              'product_number'
-            ]; ?>">
-            <input type="submit" class="btn btn-primary" value="Buy">
-          </form>
-        </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col"></div>
+      <div class="col text-ceneter">
+        <h1>Contact us at: 1-800-111-1111</h1>
       </div>
-      <?php endforeach; ?>
+      <div class="col"></div>
     </div>
   </div>
 </body>

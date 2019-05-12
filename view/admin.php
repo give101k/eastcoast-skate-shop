@@ -31,6 +31,9 @@
         <li class="nav-item">
           <a class="nav-link" href="?action=addproductpage">Add Products</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="?action=changestock">Change Stock</a>
+        </li>
       </ul>
       <form class="form-inline my-2 my-lg-0" action="index.php">
         <?php if ($_SESSION['is_valid'] == true): ?>

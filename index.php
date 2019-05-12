@@ -237,8 +237,8 @@ switch ($action) {
       include 'view/register.php';
     }
     $hash = password_hash($pass, PASSWORD_BCRYPT);
-    add_user($username, $fname, $lname, $add, $town, $state);
     add_user_pass($username, $hash);
+    add_user($username, $fname, $lname, $add, $town, $state);
     include 'view/login.php';
     break;
 
@@ -270,6 +270,7 @@ switch ($action) {
     $odnum = filter_input(INPUT_POST, 'odnum');
     updatestatus($odnum, $status);
     $order = get_order($odnum);
+    $info = get_info($order[0]['cusername']);
     $items = get_items($odnum);
     include 'view/admin_details.php';
     break;
@@ -306,6 +307,36 @@ switch ($action) {
 
   case 'addproductpage':
     include 'view/addproducts.php';
+    break;
+
+  case 'search':
+    $searchqry = filter_input(INPUT_GET, 'qry');
+    $products = search_db($searchqry);
+    include 'view/products.php';
+    break;
+
+  case 'contact':
+    include 'view/contact.php';
+    break;
+
+  case 'changestock':
+    $products = get_all_prod();
+    include 'view/stock.php';
+    break;
+
+  case 'delete':
+    $pdnum = filter_input(INPUT_POST, 'product');
+    delete_product($pdnum);
+    $products = get_all_prod();
+    include 'view/stock.php';
+    break;
+
+  case 'changeinv':
+    $pdnum = filter_input(INPUT_POST, 'product');
+    $qt = filter_input(INPUT_POST, 'qt');
+    change_inv($pdnum, $qt);
+    $products = get_all_prod();
+    include 'view/stock.php';
     break;
 }
 ?>

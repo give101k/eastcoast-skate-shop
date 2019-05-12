@@ -18,7 +18,7 @@
 
 <body>
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <a class="navbar-brand" href="index.php?action=home">EastCost Skate Shop</a>
+    <a class="navbar-brand" href="index.php?action=adminhome">EastCost Skate Shop</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -26,39 +26,18 @@
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="?action=home">Home</a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="?action=products&cat=all">Products</a>
+          <a class="nav-link" href="?action=adminhome">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="?action=account">My Account</a>
-        </li>
-        <?php if ($_SESSION['is_valid'] == false): ?>
-        <li class="nav-item">
-          <a class="nav-link" href="?action=reg">Register</a>
-        </li>
-        <?php endif; ?>
-        <li class="nav-item">
-          <a class="nav-link" href="index.php?action=cart"> Cart <i class="fas fa-shopping-cart"></i>
-            <span class="label label-primary"></span>
-            <?php echo $_SESSION['cartqt']; ?>
-            </span>
-          </a>
+          <a class="nav-link" href="?action=adminorders">Orders</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="?action=contact">Contact Us</a>
+          <a class="nav-link" href="?action=addproductpage">Add Products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="?action=changestock">Change Stock</a>
         </li>
       </ul>
-      <form class="navbar-form" action="." method="get" role="search">
-        <div class="input-group">
-          <input type="hidden" name="action" value="search">
-          <input type="text" class="form-control" placeholder="Search" name="qry">
-          <div class="input-group-btn">
-            <button class="btn btn-default" type="submit" id="search"><i class="fas fa-search"></i></button>
-          </div>
-        </div>
-      </form>
       <form class="form-inline my-2 my-lg-0" action="index.php">
         <?php if ($_SESSION['is_valid'] == true): ?>
         <input type="hidden" name="action" value="logout" />
@@ -75,16 +54,6 @@
     </div>
   </nav>
   <div class="fluid-container">
-    <div id="mySidenav" class="sidenav">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="?action=products&cat=all">All</a>
-      <a href="?action=products&cat=decks">Decks</a>
-      <a href="?action=products&cat=trucks">Trucks</a>
-      <a href="?action=products&cat=bearings">Bearings</a>
-      <a href="?action=products&cat=wheels">Wheels</a>
-      <a href="?action=products&cat=acc">Accessories</a>
-    </div>
-    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;Categories</span>
     <div class="card-columns">
       <?php foreach ($products as $pd): ?>
       <div class="card">
@@ -107,11 +76,20 @@
             <?php echo $pd['num_stock']; ?>
           </p>
           <form action="." method="post">
-            <input type="hidden" name="action" value="buy">
+            <input type="hidden" name="action" value="changeinv">
             <input type="hidden" name="product" value="<?php echo $pd[
               'product_number'
             ]; ?>">
-            <input type="submit" class="btn btn-primary" value="Buy">
+            Number in stock:
+            <input type="text" class="form-control" name="qt">
+            <input type="submit" class="btn btn-primary" value="Change" id="change">
+          </form>
+          <form action="." method="post">
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="product" value="<?php echo $pd[
+              'product_number'
+            ]; ?>">
+            <input type="submit" class="btn btn-primary" value="Delete">
           </form>
         </div>
       </div>

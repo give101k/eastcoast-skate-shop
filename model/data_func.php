@@ -410,4 +410,41 @@ function product_exist($pnum)
     return true;
   }
 }
+function search_db($qry)
+{
+  $temp = "%" . $qry;
+  $qry = $temp . "%";
+  global $db;
+  $query = 'SELECT * 
+            FROM PRODUCTS 
+            WHERE PRODUCTS.name LIKE :qry';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':qry', $qry);
+  $statement->execute();
+  $row = $statement->fetchAll();
+  $statement->closeCursor();
+  return $row;
+}
+function change_inv($pdnum, $qt)
+{
+  global $db;
+  $query =
+    'UPDATE PRODUCTS SET num_stock = :num_stock WHERE product_number = :pdnum';
+  $statement = $db->prepare($query);
+  $statement->execute(array(
+    'pdnum' => $pdnum,
+    'num_stock' => $qt
+  ));
+  $statement->closeCursor();
+}
+function delete_product($pdnum)
+{
+  global $db;
+  $query = 'DELETE FROM PRODUCTS WHERE product_number =  :pdnum';
+  $statement = $db->prepare($query);
+  $statement->execute(array(
+    'pdnum' => $pdnum
+  ));
+  $statement->closeCursor();
+}
 ?>

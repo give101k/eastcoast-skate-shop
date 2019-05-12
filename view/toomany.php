@@ -12,6 +12,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="css/home.css">
 </head>
 
 <body>
@@ -43,9 +44,18 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="">Contact Us</a>
+          <a class="nav-link" href="?action=contact">Contact Us</a>
         </li>
       </ul>
+      <form class="navbar-form" action="." method="get" role="search">
+        <div class="input-group">
+          <input type="hidden" name="action" value="search">
+          <input type="text" class="form-control" placeholder="Search" name="qry">
+          <div class="input-group-btn">
+            <button class="btn btn-default" type="submit" id="search"><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+      </form>
       <form class="form-inline my-2 my-lg-0" action="index.php">
         <?php if ($_SESSION['is_valid'] == true): ?>
         <input type="hidden" name="action" value="logout" />
